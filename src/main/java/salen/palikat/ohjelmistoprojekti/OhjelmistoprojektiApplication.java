@@ -20,6 +20,8 @@ public class OhjelmistoprojektiApplication {
 	public CommandLineRunner bookstoreDemo() {
 		return (args) -> {
 
+			
+			
 //			lainatyypit.save(new Lainatyyppi("Erotiikka"));
 //			lainatyypit.save(new Lainatyyppi("Politiikka"));
 //			lainatyypit.save(new Lainatyyppi("Eroottinen politiikka"));
