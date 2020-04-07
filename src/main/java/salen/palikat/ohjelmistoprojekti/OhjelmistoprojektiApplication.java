@@ -1,5 +1,6 @@
 package salen.palikat.ohjelmistoprojekti;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -33,17 +34,24 @@ public class OhjelmistoprojektiApplication {
 			Vaihtoehto vaihtoehto1 =new Vaihtoehto ("Vaihtoehto 1");
 			Vaihtoehto vaihtoehto2 =new Vaihtoehto ("Vaihtoehto 2");
 			Vaihtoehto vaihtoehto3 =new Vaihtoehto ("Vaihtoehto 3");
+			
+			List<Vaihtoehto> lista = new ArrayList<Vaihtoehto>();
+			lista.add(vaihtoehto1);
+			lista.add(vaihtoehto2);
+			lista.add(vaihtoehto3);
+			
+			Kysymys kysymys = new Kysymys("Kysymys 1", lista);
+			log.info("tämä tulee");
+			vaihtoehto1.setKysymys(kysymys);
+			vaihtoehto2.setKysymys(kysymys);
+			vaihtoehto3.setKysymys(kysymys);
+			log.info("tämä tulee2");
+			kysymysRepo.save(kysymys);
+			log.info("tämä tulee3");
 			vaihtoehtoRepo.save(vaihtoehto1);
 			vaihtoehtoRepo.save(vaihtoehto2);
 			vaihtoehtoRepo.save(vaihtoehto3);
-			List<Vaihtoehto> lista = vaihtoehtoRepo.findAll();
-			System.out.println(lista.get(0).getVaihtoehto());
-			Kysymys kysymys = new Kysymys("Kysymys 1", lista);
-		
-			kysymysRepo.save(new Kysymys("Kysymys", lista));
-			System.out.println(kysymys.getVaihtoehdot().get(0).getVaihtoehto());
-			
-			
+			log.info("tämä tulee4");
 //			lainatyypit.save(new Lainatyyppi("Erotiikka"));
 //			lainatyypit.save(new Lainatyyppi("Politiikka"));
 //			lainatyypit.save(new Lainatyyppi("Eroottinen politiikka"));

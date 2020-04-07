@@ -43,4 +43,8 @@ public class Vaihtoehto {
 	public Vaihtoehto() {
 		
 	}
+	@Override
+	public String toString() {
+		return "Vaihtoehto [id=" + id + ", vaihtoehto=" + vaihtoehto + ", kysymys=" + kysymys + "]";
+	}
 }
