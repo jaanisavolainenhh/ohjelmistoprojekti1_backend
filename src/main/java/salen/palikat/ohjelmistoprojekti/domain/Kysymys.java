@@ -19,6 +19,7 @@ private Long id;
 private Kysely kysely;
 private Kysymystyyppi tyyppi;
 
+//kommentoin tätä t. jussi
 public Kysymys()
 {
 	
