@@ -19,7 +19,7 @@ public class Kysely {
 	private Long id;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "kysymys")
-	@JsonIgnore // Siirretty tämä Categoryyn jotta saataisiin "oikea" data kirjasta jossa myös
+	@JsonIgnore
 	private List<Kysymys> kysymykset;
 	
 

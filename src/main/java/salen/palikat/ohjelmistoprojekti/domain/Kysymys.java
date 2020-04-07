@@ -17,6 +17,7 @@ private Long id;
 @ManyToOne	
 @JoinColumn(name = "kysely")
 private Kysely kysely;
+private Kysymystyyppi tyyppi;
 
 public Kysymys()
 {
