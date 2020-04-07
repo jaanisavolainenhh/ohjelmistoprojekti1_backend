@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Kysymys {
 	@Id
@@ -23,10 +25,19 @@ public class Kysymys {
 	private Kysely kysely;
 	private Kysymystyyppi tyyppi;
 	private String kysymys;
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "vaihtoehto")
+	//Vaihdettu Cascadetype ALlista mergeen
+	@OneToMany(cascade = CascadeType.MERGE, mappedBy = "kysymys")
+	@JsonIgnore
 	private List<Vaihtoehto> vaihtoehdot;
 
 	
+	@Override
+	public String toString() {
+		return "Kysymys [id=" + id + ", kysely=" + kysely + ", tyyppi=" + tyyppi + ", kysymys=" + kysymys
+				+ ", vaihtoehdot=" + vaihtoehdot + "]";
+	}
+
+
 	public Kysymys(Kysely kysely, Kysymystyyppi tyyppi, String kysymys, List<Vaihtoehto> vaihtoehdot) {
 		super();
 		this.kysely = kysely;

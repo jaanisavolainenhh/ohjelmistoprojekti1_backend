@@ -17,6 +17,14 @@ public class Vaihtoehto {
 	@JoinColumn(name = "kysymys")
 	private Kysymys kysymys;
 	
+	public Kysymys getKysymys() {
+		return kysymys;
+	}
+	public void setKysymys(Kysymys kysymys) {
+		this.kysymys = kysymys;
+	}
+
+	
 	public Long getId() {
 		return id;
 	}

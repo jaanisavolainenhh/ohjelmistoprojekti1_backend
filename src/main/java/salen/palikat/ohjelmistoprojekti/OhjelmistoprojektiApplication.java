@@ -28,7 +28,8 @@ public class OhjelmistoprojektiApplication {
 	public CommandLineRunner bookstoreDemo(KysymysRepository kysymysRepo, VastausRepository vastausRepo, VaihtoehtoRepository vaihtoehtoRepo) {
 		
 		return (args) -> {
-			
+//			
+			//Kysymys kysymys = new Kysymys("Moi");
 			Vaihtoehto vaihtoehto1 =new Vaihtoehto ("Vaihtoehto 1");
 			Vaihtoehto vaihtoehto2 =new Vaihtoehto ("Vaihtoehto 2");
 			Vaihtoehto vaihtoehto3 =new Vaihtoehto ("Vaihtoehto 3");
@@ -36,9 +37,12 @@ public class OhjelmistoprojektiApplication {
 			vaihtoehtoRepo.save(vaihtoehto2);
 			vaihtoehtoRepo.save(vaihtoehto3);
 			List<Vaihtoehto> lista = vaihtoehtoRepo.findAll();
-			kysymysRepo.save(new Kysymys("Kysymys", vaihtoehtoRepo.findAll()));
+			System.out.println(lista.get(0).getVaihtoehto());
+			Kysymys kysymys = new Kysymys("Kysymys 1", lista);
+		
+			kysymysRepo.save(new Kysymys("Kysymys", lista));
+			System.out.println(kysymys.getVaihtoehdot().get(0).getVaihtoehto());
 			
-			System.out.println(lista.size());
 			
 //			lainatyypit.save(new Lainatyyppi("Erotiikka"));
 //			lainatyypit.save(new Lainatyyppi("Politiikka"));

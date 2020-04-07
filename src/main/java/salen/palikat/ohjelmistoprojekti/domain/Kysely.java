@@ -18,7 +18,7 @@ public class Kysely {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "kysymys")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "kysely")
 	@JsonIgnore
 	private List<Kysymys> kysymykset;
 	
