@@ -1,7 +1,9 @@
-
 package salen.palikat.ohjelmistoprojekti.domain;
 
 import org.springframework.data.repository.CrudRepository;
 
-public interface KysymysRepository extends CrudRepository<Kysymys, Long> {
+public interface VastausRepository extends CrudRepository<Vastaus, Long> {
+	
+
 }
+

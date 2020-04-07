@@ -1,11 +1,19 @@
 package salen.palikat.ohjelmistoprojekti;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+
+import salen.palikat.ohjelmistoprojekti.domain.Kysymys;
+import salen.palikat.ohjelmistoprojekti.domain.KysymysRepository;
+import salen.palikat.ohjelmistoprojekti.domain.Vaihtoehto;
+import salen.palikat.ohjelmistoprojekti.domain.VaihtoehtoRepository;
+import salen.palikat.ohjelmistoprojekti.domain.VastausRepository;
 
 @SpringBootApplication
 public class OhjelmistoprojektiApplication {
@@ -17,10 +25,20 @@ public class OhjelmistoprojektiApplication {
 	}
 
 	@Bean // tähän voi tunkea loputtomasti argumentteja näköjään?
-	public CommandLineRunner bookstoreDemo() {
+	public CommandLineRunner bookstoreDemo(KysymysRepository kysymysRepo, VastausRepository vastausRepo, VaihtoehtoRepository vaihtoehtoRepo) {
+		
 		return (args) -> {
-
 			
+			Vaihtoehto vaihtoehto1 =new Vaihtoehto ("Vaihtoehto 1");
+			Vaihtoehto vaihtoehto2 =new Vaihtoehto ("Vaihtoehto 2");
+			Vaihtoehto vaihtoehto3 =new Vaihtoehto ("Vaihtoehto 3");
+			vaihtoehtoRepo.save(vaihtoehto1);
+			vaihtoehtoRepo.save(vaihtoehto2);
+			vaihtoehtoRepo.save(vaihtoehto3);
+			List<Vaihtoehto> lista = vaihtoehtoRepo.findAll();
+			kysymysRepo.save(new Kysymys("Kysymys", vaihtoehtoRepo.findAll()));
+			
+			System.out.println(lista.size());
 			
 //			lainatyypit.save(new Lainatyyppi("Erotiikka"));
 //			lainatyypit.save(new Lainatyyppi("Politiikka"));

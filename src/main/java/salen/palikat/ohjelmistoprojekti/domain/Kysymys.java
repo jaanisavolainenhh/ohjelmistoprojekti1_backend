@@ -2,12 +2,14 @@ package salen.palikat.ohjelmistoprojekti.domain;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Kysymys {
@@ -21,10 +23,11 @@ public class Kysymys {
 	private Kysely kysely;
 	private Kysymystyyppi tyyppi;
 	private String kysymys;
-	private List<String> vaihtoehdot;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "vaihtoehto")
+	private List<Vaihtoehto> vaihtoehdot;
 
 	
-	public Kysymys(Kysely kysely, Kysymystyyppi tyyppi, String kysymys, List<String> vaihtoehdot) {
+	public Kysymys(Kysely kysely, Kysymystyyppi tyyppi, String kysymys, List<Vaihtoehto> vaihtoehdot) {
 		super();
 		this.kysely = kysely;
 		this.tyyppi = tyyppi;
@@ -72,13 +75,19 @@ public class Kysymys {
 		this.kysymys = kysymys;
 	}
 
+	public Kysymys(String kysymys, List<Vaihtoehto> vaihtoehdot) {
+		super();
+		this.kysymys = kysymys;
+		this.vaihtoehdot = vaihtoehdot;
+	}
 
-	public List<String> getVaihtoehdot() {
+
+	public List<Vaihtoehto> getVaihtoehdot() {
 		return vaihtoehdot;
 	}
 
 
-	public void setVaihtoehdot(List<String> vaihtoehdot) {
+	public void setVaihtoehdot(List<Vaihtoehto> vaihtoehdot) {
 		this.vaihtoehdot = vaihtoehdot;
 	}
 
