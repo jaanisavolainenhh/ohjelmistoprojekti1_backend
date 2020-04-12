@@ -5,15 +5,18 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import salen.palikat.ohjelmistoprojekti.domain.Kysymys;
 import salen.palikat.ohjelmistoprojekti.domain.KysymysRepository;
 import salen.palikat.ohjelmistoprojekti.domain.VaihtoehtoRepository;
 import salen.palikat.ohjelmistoprojekti.domain.Vastaus;
 import salen.palikat.ohjelmistoprojekti.domain.VastausRepository;
+
 
 @Controller
 public class HienoControlleri {
@@ -39,12 +42,11 @@ VaihtoehtoRepository vaihtoehtoRepo;
 		
 		return "haeKysymys";
 	}
-	
-	
-	
+		
 	//@CrossOrigin
+	@ResponseBody
 	@PostMapping("/palautakysymys")
-	public String palautaKysymys(Vastaus vastaus)
+	public String palautaKysymys(@RequestBody Vastaus vastaus) //Juu tässä vaadittiin vaan @RequestBody, converttaa jsonin java classiin
 	{
 		System.out.println(vastaus.toString());
 		System.out.println(kysymysok(vastaus));
