@@ -7,6 +7,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 public class Vastaus {
 
@@ -16,6 +18,7 @@ public class Vastaus {
 	
 	private String vastaus;
 	
+	//@JsonManagedReference
 	@ManyToOne
 	@JoinColumn(name = "kysymys")
 	private Kysymys kysymys;

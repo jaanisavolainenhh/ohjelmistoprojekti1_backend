@@ -5,11 +5,13 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import salen.palikat.ohjelmistoprojekti.domain.Kysymys;
 import salen.palikat.ohjelmistoprojekti.domain.KysymysRepository;
+import salen.palikat.ohjelmistoprojekti.domain.VaihtoehtoRepository;
 import salen.palikat.ohjelmistoprojekti.domain.Vastaus;
 import salen.palikat.ohjelmistoprojekti.domain.VastausRepository;
 
@@ -21,6 +23,9 @@ KysymysRepository kysymysRepo;
 
 @Autowired
 VastausRepository vastausRepo;
+
+@Autowired
+VaihtoehtoRepository vaihtoehtoRepo;
 	
 	
 	@GetMapping("/")
@@ -35,21 +40,13 @@ VastausRepository vastausRepo;
 		return "haeKysymys";
 	}
 	
-	@PostMapping("/muntesti")
-	public String palautaKysymys()
-	{
-		System.out.println("JEEEEEEEEEEEEEEE");
-
-		return "index";
-	}
 	
 	
-	
-	
+	//@CrossOrigin
 	@PostMapping("/palautakysymys")
 	public String palautaKysymys(Vastaus vastaus)
 	{
-		System.out.println("JEEEEEEEEEEEEEEE");
+		System.out.println(vastaus.toString());
 		System.out.println(kysymysok(vastaus));
 		return "index";
 	}
@@ -57,11 +54,14 @@ VastausRepository vastausRepo;
 	
 	private boolean kysymysok(Vastaus vastaus)
 	{
-		Kysymys kysymys = kysymysRepo.findByid(vastaus.getKysymys().getId());
-		if(kysymys== null)
+
+		Optional<Kysymys> kysymys = kysymysRepo.findById((long) 1);
+		if(!kysymys.isPresent())
 			return false;
 		
-		vastaus.setKysymys(kysymys);
+		Kysymys oikeakysymys = kysymys.get();
+		System.out.println("TESTIÄ");
+		vastaus.setKysymys(oikeakysymys);
 		vastausRepo.save(vastaus);
 		return true;
 	}
