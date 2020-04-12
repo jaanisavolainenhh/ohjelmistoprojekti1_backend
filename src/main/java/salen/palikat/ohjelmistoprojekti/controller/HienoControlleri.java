@@ -5,11 +5,11 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import salen.palikat.ohjelmistoprojekti.domain.Kysymys;
 import salen.palikat.ohjelmistoprojekti.domain.KysymysRepository;
@@ -43,7 +43,7 @@ VaihtoehtoRepository vaihtoehtoRepo;
 		return "haeKysymys";
 	}
 		
-	//@CrossOrigin
+	@CrossOrigin
 	@ResponseBody
 	@PostMapping("/palautakysymys")
 	public String palautaKysymys(@RequestBody Vastaus vastaus) //Juu tässä vaadittiin vaan @RequestBody, converttaa jsonin java classiin
@@ -57,7 +57,7 @@ VaihtoehtoRepository vaihtoehtoRepo;
 	private boolean kysymysok(Vastaus vastaus)
 	{
 
-		Optional<Kysymys> kysymys = kysymysRepo.findById((long) 1);
+		Optional<Kysymys> kysymys = kysymysRepo.findById(vastaus.getKysymys().getId());
 		if(!kysymys.isPresent())
 			return false;
 		
