@@ -15,6 +15,7 @@ public class Vastaus {
 	private Long id;
 	
 	private String vastaus;
+	
 	@ManyToOne
 	@JoinColumn(name = "kysymys")
 	private Kysymys kysymys;
@@ -46,5 +47,8 @@ public class Vastaus {
 		return "Vastaus [id=" + id + ", vastaus=" + vastaus + ", kysymys=" + kysymys + "]";
 	}
 
-
+	public Vastaus()
+	{
+		
+	}
 }

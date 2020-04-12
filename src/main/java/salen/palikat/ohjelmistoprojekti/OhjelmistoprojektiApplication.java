@@ -14,6 +14,7 @@ import salen.palikat.ohjelmistoprojekti.domain.Kysymys;
 import salen.palikat.ohjelmistoprojekti.domain.KysymysRepository;
 import salen.palikat.ohjelmistoprojekti.domain.Vaihtoehto;
 import salen.palikat.ohjelmistoprojekti.domain.VaihtoehtoRepository;
+import salen.palikat.ohjelmistoprojekti.domain.Vastaus;
 import salen.palikat.ohjelmistoprojekti.domain.VastausRepository;
 
 @SpringBootApplication
@@ -40,7 +41,7 @@ public class OhjelmistoprojektiApplication {
 			lista.add(vaihtoehto2);
 			lista.add(vaihtoehto3);
 			
-			Kysymys kysymys = new Kysymys("Kysymys 1", lista);
+			Kysymys kysymys = new Kysymys("Tämä on kysymys 1, mistä väristä pidät?", lista);
 			log.info("tämä tulee");
 			vaihtoehto1.setKysymys(kysymys);
 			vaihtoehto2.setKysymys(kysymys);
@@ -52,6 +53,11 @@ public class OhjelmistoprojektiApplication {
 			vaihtoehtoRepo.save(vaihtoehto2);
 			vaihtoehtoRepo.save(vaihtoehto3);
 			log.info("tämä tulee4");
+			
+			
+			
+			Vastaus vastaus1 = new Vastaus("Tämä on vastaus, punainen.", kysymys);
+			vastausRepo.save(vastaus1);
 //			lainatyypit.save(new Lainatyyppi("Erotiikka"));
 //			lainatyypit.save(new Lainatyyppi("Politiikka"));
 //			lainatyypit.save(new Lainatyyppi("Eroottinen politiikka"));
