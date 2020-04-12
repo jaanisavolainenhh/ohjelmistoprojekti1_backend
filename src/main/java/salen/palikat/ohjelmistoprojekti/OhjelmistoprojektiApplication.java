@@ -57,7 +57,11 @@ public class OhjelmistoprojektiApplication {
 			
 			
 			Vastaus vastaus1 = new Vastaus("Tämä on vastaus, punainen.", kysymys);
+			Vastaus vastaus2 = new Vastaus("Tämä on vastaus, sininen.", kysymys);
+
 			vastausRepo.save(vastaus1);
+			vastausRepo.save(vastaus2);
+
 //			lainatyypit.save(new Lainatyyppi("Erotiikka"));
 //			lainatyypit.save(new Lainatyyppi("Politiikka"));
 //			lainatyypit.save(new Lainatyyppi("Eroottinen politiikka"));

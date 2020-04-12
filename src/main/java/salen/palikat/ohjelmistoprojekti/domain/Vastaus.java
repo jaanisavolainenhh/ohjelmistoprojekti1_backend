@@ -42,13 +42,14 @@ public class Vastaus {
 		this.vastaus = vastaus;
 		this.kysymys = kysymys;
 	}
+
 	@Override
 	public String toString() {
 		return "Vastaus [id=" + id + ", vastaus=" + vastaus + ", kysymys=" + kysymys + "]";
 	}
-
-	public Vastaus()
-	{
+	public Vastaus() {
 		
 	}
+	
+	
 }
