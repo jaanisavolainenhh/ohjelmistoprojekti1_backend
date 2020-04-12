@@ -19,6 +19,11 @@ public class Vastaus {
 	@ManyToOne
 	@JoinColumn(name = "kysymys")
 	private Kysymys kysymys;
+	
+	
+	
+	
+	
 	public Long getId() {
 		return id;
 	}
