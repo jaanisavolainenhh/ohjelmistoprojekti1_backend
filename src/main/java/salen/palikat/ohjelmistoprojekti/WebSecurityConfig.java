@@ -34,6 +34,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+		if (true) {
+			http.csrf().disable(); //enabloi deleten käyttämisen
+			http.authorizeRequests().antMatchers("/**").permitAll();
+		}
+		else 
+			
+		{
+			
         http
         .authorizeRequests().antMatchers("/css/**").permitAll() // Enable css when logged out
         .and()
@@ -50,6 +58,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
           .and()
       .logout()
           .permitAll();
+		}
     }
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
