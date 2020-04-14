@@ -32,9 +32,9 @@ public class OhjelmistoprojektiApplication {
 		return (args) -> {
 //			
 			//Kysymys kysymys = new Kysymys("Moi");
-			Vaihtoehto vaihtoehto1 =new Vaihtoehto ("Vaihtoehto 1");
-			Vaihtoehto vaihtoehto2 =new Vaihtoehto ("Vaihtoehto 2");
-			Vaihtoehto vaihtoehto3 =new Vaihtoehto ("Vaihtoehto 3");
+			Vaihtoehto vaihtoehto1 =new Vaihtoehto ("Ruskea");
+			Vaihtoehto vaihtoehto2 =new Vaihtoehto ("Oranssi");
+			Vaihtoehto vaihtoehto3 =new Vaihtoehto ("Pinkki");
 			
 			List<Vaihtoehto> lista = new ArrayList<Vaihtoehto>();
 			lista.add(vaihtoehto1);
@@ -56,11 +56,13 @@ public class OhjelmistoprojektiApplication {
 			
 			
 			
-			Vastaus vastaus1 = new Vastaus("Tämä on vastaus, punainen.", kysymys);
-			Vastaus vastaus2 = new Vastaus("Tämä on vastaus, sininen.", kysymys);
+//			Vastaus vastaus1 = new Vastaus("Punainen", kysymys);
+//			Vastaus vastaus2 = new Vastaus("Ruskea", kysymys);
+//			Vastaus vastaus3 = new Vastaus("Oranssi", kysymys);
+//			vastausRepo.save(vastaus1);
+//			vastausRepo.save(vastaus2);
+//			vastausRepo.save(vastaus3);
 
-			vastausRepo.save(vastaus1);
-			vastausRepo.save(vastaus2);
 
 //			lainatyypit.save(new Lainatyyppi("Erotiikka"));
 //			lainatyypit.save(new Lainatyyppi("Politiikka"));
