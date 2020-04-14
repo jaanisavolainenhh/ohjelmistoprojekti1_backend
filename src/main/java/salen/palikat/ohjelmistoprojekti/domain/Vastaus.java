@@ -23,8 +23,8 @@ public class Vastaus {
 	@JoinColumn(name = "kysymys")
 	private Kysymys kysymys;
 	
-	
-	
+	//käytetään yksilöimään kyselun vastaukset jotta saadaan grooupattua yhteen
+	private int sessionkey;
 	
 	
 	public Long getId() {

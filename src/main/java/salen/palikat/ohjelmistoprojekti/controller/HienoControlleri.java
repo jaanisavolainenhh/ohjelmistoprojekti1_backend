@@ -1,5 +1,6 @@
 package salen.palikat.ohjelmistoprojekti.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,21 @@ VaihtoehtoRepository vaihtoehtoRepo;
 		
 		return "haeKysymys";
 	}
+	
+	
+//	@CrossOrigin
+//	@ResponseBody
+//	@PostMapping("/palautakysely")
+//	public String palautaKysymysLista(@RequestBody List<Vastaus >vastaus) //Juu tässä vaadittiin vaan @RequestBody, converttaa jsonin java classiin
+//	{
+//		System.out.println(vastaus.toString());
+//		//System.out.println(kysymysok(vastaus));
+//		return "index";
+//	}
+//	
+//	
+	
+	
 		
 	@CrossOrigin
 	@ResponseBody
