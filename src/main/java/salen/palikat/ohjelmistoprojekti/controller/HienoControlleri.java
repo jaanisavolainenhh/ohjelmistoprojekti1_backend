@@ -3,6 +3,8 @@ package salen.palikat.ohjelmistoprojekti.controller;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import salen.palikat.ohjelmistoprojekti.domain.Kysymys;
 import salen.palikat.ohjelmistoprojekti.domain.KysymysRepository;
+import salen.palikat.ohjelmistoprojekti.domain.SessioID;
+import salen.palikat.ohjelmistoprojekti.domain.SessioIDRepository;
 import salen.palikat.ohjelmistoprojekti.domain.VaihtoehtoRepository;
 import salen.palikat.ohjelmistoprojekti.domain.Vastaus;
 import salen.palikat.ohjelmistoprojekti.domain.VastausRepository;
@@ -30,6 +34,9 @@ VastausRepository vastausRepo;
 
 @Autowired
 VaihtoehtoRepository vaihtoehtoRepo;
+
+@Autowired
+SessioIDRepository sessioidRepo;
 	
 	
 	@GetMapping("/")
@@ -62,10 +69,19 @@ VaihtoehtoRepository vaihtoehtoRepo;
 	@CrossOrigin
 	@ResponseBody
 	@PostMapping("/palautakysymys")
-	public String palautaKysymys(@RequestBody Vastaus vastaus) //Juu tässä vaadittiin vaan @RequestBody, converttaa jsonin java classiin
+	public String palautaKysymys(@RequestBody List<Vastaus> vastaus) //Juu tässä vaadittiin vaan @RequestBody, converttaa jsonin java classiin
 	{
-		System.out.println(vastaus.toString());
-		System.out.println(kysymysok(vastaus));
+		
+		SessioID sessioid = new SessioID();
+		sessioidRepo.save(sessioid);
+		
+		for(Vastaus uusivastaus : vastaus) {
+			uusivastaus.setSessioid(sessioid.getId().intValue());
+			System.out.println(kysymysok(uusivastaus));
+		}
+		
+		//System.out.println(vastaus.toString());
+		//  System.out.println(kysymysok(vastaus));
 		return "index";
 	}
 	
