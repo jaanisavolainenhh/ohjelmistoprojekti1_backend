@@ -14,24 +14,31 @@ public class Vastaus {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	private Long vastaus_id;
 	
 	private String vastaus;
 	
 	//@JsonManagedReference
 	@ManyToOne
-	@JoinColumn(name = "kysymys")
+	@JoinColumn(name = "kysymys_id")
 	private Kysymys kysymys;
 	
 	//käytetään yksilöimään kyselun vastaukset jotta saadaan grooupattua yhteen
 	private int sessionkey;
 	
 	
-	public Long getId() {
-		return id;
+
+	public Long getVastaus_id() {
+		return vastaus_id;
 	}
-	public void setId(Long id) {
-		this.id = id;
+	public void setVastaus_id(Long vastaus_id) {
+		this.vastaus_id = vastaus_id;
+	}
+	public int getSessionkey() {
+		return sessionkey;
+	}
+	public void setSessionkey(int sessionkey) {
+		this.sessionkey = sessionkey;
 	}
 	public String getVastaus() {
 		return vastaus;
@@ -53,7 +60,7 @@ public class Vastaus {
 
 	@Override
 	public String toString() {
-		return "Vastaus [id=" + id + ", vastaus=" + vastaus + ", kysymys=" + kysymys + "]";
+		return "Vastaus [id=" + vastaus_id + ", vastaus=" + vastaus + ", kysymys=" + kysymys + "]";
 	}
 	public Vastaus() {
 		
