@@ -77,6 +77,7 @@ public class OhjelmistoprojektiApplication {
 			vaihtoehtoRepo.save(new Vaihtoehto("Ruskea", kysymysRepo.findByKysymys("Tämä on kysymys 1, mistä väristä pidät?").get(0)));
 			vaihtoehtoRepo.save(new Vaihtoehto("Oranssi", kysymysRepo.findByKysymys("Tämä on kysymys 1, mistä väristä pidät?").get(0)));
 			vaihtoehtoRepo.save(new Vaihtoehto("Pinkki", kysymysRepo.findByKysymys("Tämä on kysymys 1, mistä väristä pidät?").get(0)));
+			vaihtoehtoRepo.save(new Vaihtoehto("", kysymysRepo.findByKysymys("Tämä on kysymys 2, anna teksti").get(0)));
 			
 			
 //			Vastaus vastaus1 = new Vastaus("Punainen", kysymys);
