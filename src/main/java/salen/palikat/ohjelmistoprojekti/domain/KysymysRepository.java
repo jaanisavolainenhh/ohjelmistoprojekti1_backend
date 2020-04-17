@@ -1,6 +1,8 @@
 
 package salen.palikat.ohjelmistoprojekti.domain;
 
+import java.util.List;
+
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
@@ -9,4 +11,5 @@ public interface KysymysRepository extends CrudRepository<Kysymys, Long> {
 	//Kysymys findById(Long id);
 //	@Override
 //    Kysymys findById(Long id);
+	List<Kysymys> findByKysymys(String kysymys);
 }

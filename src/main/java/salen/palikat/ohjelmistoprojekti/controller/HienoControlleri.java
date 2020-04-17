@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import salen.palikat.ohjelmistoprojekti.domain.Kysely;
+import salen.palikat.ohjelmistoprojekti.domain.KyselyRepository;
 import salen.palikat.ohjelmistoprojekti.domain.Kysymys;
 import salen.palikat.ohjelmistoprojekti.domain.KysymysRepository;
 import salen.palikat.ohjelmistoprojekti.domain.SessioID;
@@ -36,7 +38,12 @@ VastausRepository vastausRepo;
 VaihtoehtoRepository vaihtoehtoRepo;
 
 @Autowired
-SessioIDRepository sessioidRepo;
+
+SessioIDRepository sessioidRepo; 
+
+ @Autowired
+KyselyRepository kyselyRepo;
+
 	
 	
 	@GetMapping("/")
@@ -49,6 +56,28 @@ SessioIDRepository sessioidRepo;
 	public String haeKysymys(Model model) {
 		
 		return "haeKysymys";
+	}
+	
+	@GetMapping("/kyselyt")
+	public @ResponseBody List<Kysely> kyselyListResti() {
+		return (List<Kysely>) kyselyRepo.findAll();
+	}
+	
+	//Tähän
+	@PostMapping("/kysely")
+	public @ResponseBody String kyselyynVastaukset(@RequestBody Kysely kysely) {
+		System.out.println(kysely.getKysymykset().size());
+		for (int i = 0; i < kysely.getKysymykset().size(); i++) {
+			//Vastaus luokka voidaan ottaa kokonaan pois ja postata suoraan vaihtoehtoluokan tiedoilla kiakki vastauksen tietokannan uuteen vastaus tauluun (uusi repo?)
+			for (int j = 0; j < kysely.getKysymykset().get(i).getVastaus().size(); j++) {
+				//tässä kohdassa generoidaan sessionID
+				//kysely.getKysymykset().get(i).getVastaus().get(j).setSessionkey(GENEROITU_KEY);
+				Vastaus vastaus = kysely.getKysymykset().get(i).getVastaus().get(j);
+				vastausRepo.save(vastaus);
+			}
+		}
+		
+		return  "Vastausten lähettäminen onnistui.";
 	}
 	
 	
@@ -89,7 +118,7 @@ SessioIDRepository sessioidRepo;
 	private boolean kysymysok(Vastaus vastaus)
 	{
 
-		Optional<Kysymys> kysymys = kysymysRepo.findById(vastaus.getKysymys().getId());
+		Optional<Kysymys> kysymys = kysymysRepo.findById(vastaus.getKysymys().getKysymys_id());
 		if(!kysymys.isPresent())
 			return false;
 		
