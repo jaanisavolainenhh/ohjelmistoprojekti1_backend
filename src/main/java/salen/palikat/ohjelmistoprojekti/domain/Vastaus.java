@@ -42,10 +42,10 @@ public class Vastaus {
 		this.vastaus_id = vastaus_id;
 	}
 	public int getSessionkey() {
-		return sessionkey;
+		return sessioid;
 	}
 	public void setSessionkey(int sessionkey) {
-		this.sessionkey = sessionkey;
+		this.sessioid = sessionkey;
 	}
 	public String getVastaus() {
 		return vastaus;

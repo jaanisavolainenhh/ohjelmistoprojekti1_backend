@@ -63,6 +63,25 @@ KyselyRepository kyselyRepo;
 		return (List<Kysely>) kyselyRepo.findAll();
 	}
 	
+	//Tällä kaverilla saadaan tallennettua uusi kysely
+	@PostMapping("/tallenna_kysely")
+	public @ResponseBody String kyselynTallennus(@RequestBody Kysely kysely) {
+		//tallenetaan kysely kantaan
+		kyselyRepo.save(kysely);
+		//käydään läpi kaikki kyselyn kysymykset
+		for (int i = 0; i < kysely.getKysymykset().size(); i++) {
+			//tallenetaan kysymys kantaan
+			kysymysRepo.save(kysely.getKysymykset().get(i));
+			//sitten taas käydään kysymyksen kaikki vaihtoehdot läpi
+			for (int j = 0; j < kysely.getKysymykset().get(i).getVaihtoehdot().size(); j++) {
+				//ja tallennetaan nekin talteen
+				vaihtoehtoRepo.save(kysely.getKysymykset().get(i).getVaihtoehdot().get(j));
+			}
+		}	
+			
+		return "Onnistuit";
+	}
+	
 	//Tähän
 	@PostMapping("/kysely")
 	public @ResponseBody String kyselyynVastaukset(@RequestBody Kysely kysely) {
