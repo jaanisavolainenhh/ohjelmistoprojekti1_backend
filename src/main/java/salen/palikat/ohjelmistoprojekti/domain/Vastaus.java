@@ -22,10 +22,17 @@ public class Vastaus {
 	@ManyToOne
 	@JoinColumn(name = "kysymys_id")
 	private Kysymys kysymys;
-	
+
+
 	//käytetään yksilöimään kyselun vastaukset jotta saadaan grooupattua yhteen
-	private int sessionkey;
-	
+	private int sessioid;
+
+	public int getSessioid() {
+		return sessioid;
+	}
+	public void setSessioid(int sessioid) {
+		this.sessioid = sessioid;
+	}
 	
 
 	public Long getVastaus_id() {
@@ -35,10 +42,10 @@ public class Vastaus {
 		this.vastaus_id = vastaus_id;
 	}
 	public int getSessionkey() {
-		return sessionkey;
+		return sessioid;
 	}
 	public void setSessionkey(int sessionkey) {
-		this.sessionkey = sessionkey;
+		this.sessioid = sessionkey;
 	}
 	public String getVastaus() {
 		return vastaus;
@@ -52,6 +59,7 @@ public class Vastaus {
 	public void setKysymys(Kysymys kysymys) {
 		this.kysymys = kysymys;
 	}
+	
 	public Vastaus(String vastaus, Kysymys kysymys) {
 		super();
 		this.vastaus = vastaus;
@@ -65,6 +73,7 @@ public class Vastaus {
 	public Vastaus() {
 		
 	}
+
 	
 	
 }
