@@ -58,10 +58,16 @@ KyselyRepository kyselyRepo;
 		return "haeKysymys";
 	}
 	
+	@CrossOrigin
 	@GetMapping("/kyselyt")
 	public @ResponseBody List<Kysely> kyselyListResti() {
 		return (List<Kysely>) kyselyRepo.findAll();
 	}
+	
+//	@GetMapping("/sessions/{id}")
+//	public @ResponseBody List<Kysely> kyselySessioittainResti() {
+//		return (List<Kysymys>) kysymysRepo.findAll();
+//	}
 	
 	//Tällä kaverilla saadaan tallennettua uusi kysely
 	@PostMapping("/tallenna_kysely")
