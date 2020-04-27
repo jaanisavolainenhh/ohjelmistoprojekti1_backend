@@ -25,6 +25,10 @@ public class Kysely {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "kysely")
 	@JsonManagedReference
 	private List<Kysymys> kysymykset;
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "kysely")
+	@JsonManagedReference
+	private List<SessioID> sessioidt;
 
 	public Kysely(List<Kysymys> kysymykset) {
 		super();
@@ -34,6 +38,7 @@ public class Kysely {
 	public Kysely() {
 		
 	}
+
 
 	public Kysely(String name) {
 		super();
@@ -71,5 +76,11 @@ public class Kysely {
 		this.kysymykset = kysymykset;
 	}
 	
-	
+	public List<SessioID> getSessioidt() {
+		return sessioidt;
+	}
+
+	public void setSessioidt(List<SessioID> sessioidt) {
+		this.sessioidt = sessioidt;
+	}
 }

@@ -35,6 +35,7 @@ public class Kysymys {
 	@JsonManagedReference
 	private List<Vaihtoehto> vaihtoehdot;
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "kysymys")
+	@JsonManagedReference
 	private List<Vastaus> vastaus;
 
 	

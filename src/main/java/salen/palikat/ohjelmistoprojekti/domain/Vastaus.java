@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
@@ -20,6 +21,7 @@ public class Vastaus {
 	
 	//@JsonManagedReference
 	@ManyToOne
+	@JsonBackReference
 	@JoinColumn(name = "kysymys_id")
 	private Kysymys kysymys;
 
@@ -41,12 +43,13 @@ public class Vastaus {
 	public void setVastaus_id(Long vastaus_id) {
 		this.vastaus_id = vastaus_id;
 	}
-	public int getSessionkey() {
-		return sessioid;
-	}
-	public void setSessionkey(int sessionkey) {
-		this.sessioid = sessionkey;
-	}
+	// Jotain turhaa, tekeekö näillä mitään?
+//	public int getSessionkey() {
+//		return sessioid;
+//	}
+//	public void setSessionkey(int sessionkey) {
+//		this.sessioid = sessionkey;
+//	}
 	public String getVastaus() {
 		return vastaus;
 	}

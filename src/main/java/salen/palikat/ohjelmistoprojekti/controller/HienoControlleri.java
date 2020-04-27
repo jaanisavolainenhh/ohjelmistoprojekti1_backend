@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -43,34 +44,58 @@ SessioIDRepository sessioidRepo;
 
  @Autowired
 KyselyRepository kyselyRepo;
-
 	
-	
-	@GetMapping("/")
-	public String indexGet(Model model) {
-		return "index";
-	}
-	
-	
-	@GetMapping("/haekysymys")
-	public String haeKysymys(Model model) {
-		
-		return "haeKysymys";
-	}
-	
+ 	@CrossOrigin
+	@GetMapping("/kyselytadmin")
+	public @ResponseBody List<Kysely> kyselyListAdminResti() {
+ 		return (List<Kysely>) kyselyRepo.findAll();
+ 	}
+ 
 	@CrossOrigin
 	@GetMapping("/kyselyt")
 	public @ResponseBody List<Kysely> kyselyListResti() {
-		return (List<Kysely>) kyselyRepo.findAll();
+		List<Kysely> kyselyt = (List<Kysely>) kyselyRepo.findAll();
+		for (int i = 0; i < kyselyt.size(); i++) {
+			kyselyt.get(i).setSessioidt(null);
+			for (int j = 0; j < kyselyt.get(i).getKysymykset().size(); j++) {
+				kyselyt.get(i).getKysymykset().get(j).setVastaus(null);
+			}
+		}
+		return kyselyt;
 	}
 	
+	//Tähän käyttäjä postaa kyselyn vastaukset kysely-oliona
+	@CrossOrigin
+	@PostMapping("/kyselyt")
+	public @ResponseBody String kyselyynVastaukset(@RequestBody Kysely kysely) {
+		System.out.println(kysely.getKysymykset().size());
+		SessioID sessioid = new SessioID();
+		sessioid.setKysely(kyselyRepo.findById(kysely.getKysely_id()).get());
+		sessioidRepo.save(sessioid);
+		for (int i = 0; i < kysely.getKysymykset().size(); i++) {
+			//Vastaus luokka voidaan ottaa kokonaan pois ja postata suoraan vaihtoehtoluokan tiedoilla kiakki vastauksen tietokannan uuteen vastaus tauluun (uusi repo?)
+			for (int j = 0; j < kysely.getKysymykset().get(i).getVastaus().size(); j++) {
+				//tässä kohdassa generoidaan sessionID
+				//kysely.getKysymykset().get(i).getVastaus().get(j).setSessionkey(GENEROITU_KEY);
+
+				Vastaus vastaus = kysely.getKysymykset().get(i).getVastaus().get(j);
+				vastaus.setSessioid(sessioid.getId().intValue());
+				vastausRepo.save(vastaus);
+			}
+		}
+		
+		return  "Vastausten lähettäminen onnistui.";
+	}
+	
+//	@CrossOrigin
 //	@GetMapping("/sessions/{id}")
-//	public @ResponseBody List<Kysely> kyselySessioittainResti() {
-//		return (List<Kysymys>) kysymysRepo.findAll();
+//	public @ResponseBody List<Vastaus> vastauksetSessioittainResti(@PathVariable("id") int sessioid) {
+//		return vastausRepo.findBySessioid(sessioid);
 //	}
 	
 	//Tällä kaverilla saadaan tallennettua uusi kysely
-	@PostMapping("/tallenna_kysely")
+	@CrossOrigin
+	@PostMapping("/tallennauusikysely")
 	public @ResponseBody String kyselynTallennus(@RequestBody Kysely kysely) {
 		//tallenetaan kysely kantaan
 		kyselyRepo.save(kysely);
@@ -88,25 +113,6 @@ KyselyRepository kyselyRepo;
 		return "Onnistuit";
 	}
 	
-	//Tähän
-	@PostMapping("/kysely")
-	public @ResponseBody String kyselyynVastaukset(@RequestBody Kysely kysely) {
-		System.out.println(kysely.getKysymykset().size());
-		for (int i = 0; i < kysely.getKysymykset().size(); i++) {
-			//Vastaus luokka voidaan ottaa kokonaan pois ja postata suoraan vaihtoehtoluokan tiedoilla kiakki vastauksen tietokannan uuteen vastaus tauluun (uusi repo?)
-			for (int j = 0; j < kysely.getKysymykset().get(i).getVastaus().size(); j++) {
-				//tässä kohdassa generoidaan sessionID
-				//kysely.getKysymykset().get(i).getVastaus().get(j).setSessionkey(GENEROITU_KEY);
-				SessioID sessioid = new SessioID();
-				sessioidRepo.save(sessioid);
-				Vastaus vastaus = kysely.getKysymykset().get(i).getVastaus().get(j);
-				vastaus.setSessioid(sessioid.getId().intValue());
-				vastausRepo.save(vastaus);
-			}
-		}
-		
-		return  "Vastausten lähettäminen onnistui.";
-	}
 	
 	
 //	@CrossOrigin
@@ -122,7 +128,7 @@ KyselyRepository kyselyRepo;
 //	
 	
 	
-		
+	//EI käytössä atm, jätetään jostain syystä	
 	@CrossOrigin
 	@ResponseBody
 	@PostMapping("/palautakysymys")
