@@ -14,24 +14,38 @@ public class Vastaus {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	private Long vastaus_id;
 	
 	private String vastaus;
 	
 	//@JsonManagedReference
 	@ManyToOne
-	@JoinColumn(name = "kysymys")
+	@JoinColumn(name = "kysymys_id")
 	private Kysymys kysymys;
-	
-	
-	
-	
-	
-	public Long getId() {
-		return id;
+
+
+	//käytetään yksilöimään kyselun vastaukset jotta saadaan grooupattua yhteen
+	private int sessioid;
+
+	public int getSessioid() {
+		return sessioid;
 	}
-	public void setId(Long id) {
-		this.id = id;
+	public void setSessioid(int sessioid) {
+		this.sessioid = sessioid;
+	}
+	
+
+	public Long getVastaus_id() {
+		return vastaus_id;
+	}
+	public void setVastaus_id(Long vastaus_id) {
+		this.vastaus_id = vastaus_id;
+	}
+	public int getSessionkey() {
+		return sessioid;
+	}
+	public void setSessionkey(int sessionkey) {
+		this.sessioid = sessionkey;
 	}
 	public String getVastaus() {
 		return vastaus;
@@ -45,6 +59,7 @@ public class Vastaus {
 	public void setKysymys(Kysymys kysymys) {
 		this.kysymys = kysymys;
 	}
+	
 	public Vastaus(String vastaus, Kysymys kysymys) {
 		super();
 		this.vastaus = vastaus;
@@ -53,11 +68,12 @@ public class Vastaus {
 
 	@Override
 	public String toString() {
-		return "Vastaus [id=" + id + ", vastaus=" + vastaus + ", kysymys=" + kysymys + "]";
+		return "Vastaus [id=" + vastaus_id + ", vastaus=" + vastaus + ", kysymys=" + kysymys + "]";
 	}
 	public Vastaus() {
 		
 	}
+
 	
 	
 }

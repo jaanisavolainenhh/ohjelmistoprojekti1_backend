@@ -10,8 +10,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import salen.palikat.ohjelmistoprojekti.domain.Kysely;
+import salen.palikat.ohjelmistoprojekti.domain.KyselyRepository;
 import salen.palikat.ohjelmistoprojekti.domain.Kysymys;
 import salen.palikat.ohjelmistoprojekti.domain.KysymysRepository;
+import salen.palikat.ohjelmistoprojekti.domain.Kysymystyyppi;
 import salen.palikat.ohjelmistoprojekti.domain.Vaihtoehto;
 import salen.palikat.ohjelmistoprojekti.domain.VaihtoehtoRepository;
 import salen.palikat.ohjelmistoprojekti.domain.Vastaus;
@@ -27,40 +30,63 @@ public class OhjelmistoprojektiApplication {
 	}
 
 	@Bean // tähän voi tunkea loputtomasti argumentteja näköjään?
-	public CommandLineRunner bookstoreDemo(KysymysRepository kysymysRepo, VastausRepository vastausRepo, VaihtoehtoRepository vaihtoehtoRepo) {
+	public CommandLineRunner bookstoreDemo(KyselyRepository kyselyRepo, KysymysRepository kysymysRepo, VastausRepository vastausRepo, VaihtoehtoRepository vaihtoehtoRepo) {
 		
 		return (args) -> {
 //			
 			//Kysymys kysymys = new Kysymys("Moi");
-			Vaihtoehto vaihtoehto1 =new Vaihtoehto ("Vaihtoehto 1");
-			Vaihtoehto vaihtoehto2 =new Vaihtoehto ("Vaihtoehto 2");
-			Vaihtoehto vaihtoehto3 =new Vaihtoehto ("Vaihtoehto 3");
+//			Vaihtoehto vaihtoehto1 =new Vaihtoehto ("Ruskea");
+//			Vaihtoehto vaihtoehto2 =new Vaihtoehto ("Oranssi");
+//			Vaihtoehto vaihtoehto3 =new Vaihtoehto ("Pinkki");
+//			
+//			List<Vaihtoehto> vaihtoehdot1 = new ArrayList<Vaihtoehto>();
+//			vaihtoehdot1.add(vaihtoehto1);
+//			vaihtoehdot1.add(vaihtoehto2);
+//			vaihtoehdot1.add(vaihtoehto3);
+//			
+//			Kysymys kysymys1 = new Kysymys("Tämä on kysymys 1, mistä väristä pidät?", Kysymystyyppi.Radio, vaihtoehdot1);
+//			Kysymys kysymys2 = new Kysymys("Tämä on kysymys 2, anna teksti", Kysymystyyppi.Teksti);
+//			
+//			List<Kysymys> kysymykset1 = new ArrayList<Kysymys>();
+//			kysymykset1.add(kysymys1);
+//			kysymykset1.add(kysymys2);
+//			
+//			Kysely kysely1 = new Kysely(kysymykset1);
+//			
+//			log.info("tämä tulee");
+//			vaihtoehto1.setKysymys(kysymys1);
+//			vaihtoehto2.setKysymys(kysymys1);
+//			vaihtoehto3.setKysymys(kysymys1);
+//			log.info("tämä tulee2");
+//			kysymys1.setKysely(kysely1);
+//			kysymys2.setKysely(kysely1);
+//			log.info("tämä tulee3");
+//			kyselyRepo.save(kysely1);
+//			log.info("tämä tulee4");
+//			kysymysRepo.save(kysymys1);
+//			kysymysRepo.save(kysymys2);
+//			log.info("tämä tulee5");
+//			vaihtoehtoRepo.save(vaihtoehto1);
+//			vaihtoehtoRepo.save(vaihtoehto2);
+//			vaihtoehtoRepo.save(vaihtoehto3);
+//			log.info("tämä tulee6");
 			
-			List<Vaihtoehto> lista = new ArrayList<Vaihtoehto>();
-			lista.add(vaihtoehto1);
-			lista.add(vaihtoehto2);
-			lista.add(vaihtoehto3);
-			
-			Kysymys kysymys = new Kysymys("Tämä on kysymys 1, mistä väristä pidät?", lista);
-			log.info("tämä tulee");
-			vaihtoehto1.setKysymys(kysymys);
-			vaihtoehto2.setKysymys(kysymys);
-			vaihtoehto3.setKysymys(kysymys);
-			log.info("tämä tulee2");
-			kysymysRepo.save(kysymys);
-			log.info("tämä tulee3");
-			vaihtoehtoRepo.save(vaihtoehto1);
-			vaihtoehtoRepo.save(vaihtoehto2);
-			vaihtoehtoRepo.save(vaihtoehto3);
-			log.info("tämä tulee4");
+			kyselyRepo.save(new Kysely("Kysely1"));
+			kysymysRepo.save(new Kysymys("Tämä on kysymys 1, mistä väristä pidät?", Kysymystyyppi.Radio, kyselyRepo.findByName("Kysely1").get(0)));
+			kysymysRepo.save(new Kysymys("Tämä on kysymys 2, anna teksti", Kysymystyyppi.Teksti, kyselyRepo.findByName("Kysely1").get(0)));
+			vaihtoehtoRepo.save(new Vaihtoehto("Ruskea", kysymysRepo.findByKysymys("Tämä on kysymys 1, mistä väristä pidät?").get(0)));
+			vaihtoehtoRepo.save(new Vaihtoehto("Oranssi", kysymysRepo.findByKysymys("Tämä on kysymys 1, mistä väristä pidät?").get(0)));
+			vaihtoehtoRepo.save(new Vaihtoehto("Pinkki", kysymysRepo.findByKysymys("Tämä on kysymys 1, mistä väristä pidät?").get(0)));
+			vaihtoehtoRepo.save(new Vaihtoehto("", kysymysRepo.findByKysymys("Tämä on kysymys 2, anna teksti").get(0)));
 			
 			
-			
-			Vastaus vastaus1 = new Vastaus("Tämä on vastaus, punainen.", kysymys);
-			Vastaus vastaus2 = new Vastaus("Tämä on vastaus, sininen.", kysymys);
+//			Vastaus vastaus1 = new Vastaus("Punainen", kysymys);
+//			Vastaus vastaus2 = new Vastaus("Ruskea", kysymys);
+//			Vastaus vastaus3 = new Vastaus("Oranssi", kysymys);
+//			vastausRepo.save(vastaus1);
+//			vastausRepo.save(vastaus2);
+//			vastausRepo.save(vastaus3);
 
-			vastausRepo.save(vastaus1);
-			vastausRepo.save(vastaus2);
 
 //			lainatyypit.save(new Lainatyyppi("Erotiikka"));
 //			lainatyypit.save(new Lainatyyppi("Politiikka"));

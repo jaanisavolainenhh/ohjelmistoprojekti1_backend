@@ -7,14 +7,19 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 public class Vaihtoehto {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	//id nimet muutettu
+	private Long vaihtoehto_id;
 	private String vaihtoehto;
 	@ManyToOne
-	@JoinColumn(name = "kysymys")
+	@JsonBackReference
+	@JoinColumn(name = "kysymys_id")
 	private Kysymys kysymys;
 	
 	public Kysymys getKysymys() {
@@ -25,11 +30,12 @@ public class Vaihtoehto {
 	}
 
 	
-	public Long getId() {
-		return id;
+	
+	public Long getVaihtoehto_id() {
+		return vaihtoehto_id;
 	}
-	public void setId(Long id) {
-		this.id = id;
+	public void setVaihtoehto_id(Long vaihtoehto_id) {
+		this.vaihtoehto_id = vaihtoehto_id;
 	}
 	public String getVaihtoehto() {
 		return vaihtoehto;
@@ -40,11 +46,17 @@ public class Vaihtoehto {
 	public Vaihtoehto(String vaihtoehto) {
 		this.vaihtoehto = vaihtoehto;
 	}
+	
+	public Vaihtoehto(String vaihtoehto, Kysymys kysymys) {
+		super();
+		this.vaihtoehto = vaihtoehto;
+		this.kysymys = kysymys;
+	}
 	public Vaihtoehto() {
 		
 	}
 	@Override
 	public String toString() {
-		return "Vaihtoehto [id=" + id + ", vaihtoehto=" + vaihtoehto + ", kysymys=" + kysymys + "]";
+		return "Vaihtoehto [id=" + vaihtoehto_id + ", vaihtoehto=" + vaihtoehto + ", kysymys=" + kysymys + "]";
 	}
 }

@@ -11,30 +11,46 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Kysymys {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	//id nimet muutettu
+	private Long kysymys_id;
 
 	// olikos tää nyt näin
 	@ManyToOne
-	@JoinColumn(name = "kysely")
+	@JsonBackReference
+	//vaihdettu viittaamaan yksilöydympään kysely id, jotta all toimii
+	@JoinColumn(name = "kysely_id")
 	private Kysely kysely;
 	private Kysymystyyppi tyyppi;
 	private String kysymys;
-	//Vaihdettu Cascadetype ALlista mergeen
-	@OneToMany(cascade = CascadeType.MERGE, mappedBy = "kysymys")
-	@JsonIgnore
+	//Vaihdettu Cascadetype Mergestä takaisin alliin
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "kysymys")
+	@JsonManagedReference
 	private List<Vaihtoehto> vaihtoehdot;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "kysymys")
+	private List<Vastaus> vastaus;
 
 	
+	public List<Vastaus> getVastaus() {
+		return vastaus;
+	}
+
+
+	public void setVastaus(List<Vastaus> vastaus) {
+		this.vastaus = vastaus;
+	}
+
+
 	@Override
 	public String toString() {
-		return "Kysymys [id=" + id + ", kysely=" + kysely + ", tyyppi=" + tyyppi + ", kysymys=" + kysymys
-				+ ", vaihtoehdot=" + vaihtoehdot + "]";
+		return "Kysymys [id=" + kysymys_id;
 	}
 
 
@@ -47,13 +63,16 @@ public class Kysymys {
 	}
 
 
-	public Long getId() {
-		return id;
+	
+
+
+	public Long getKysymys_id() {
+		return kysymys_id;
 	}
 
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setKysymys_id(Long kysymys_id) {
+		this.kysymys_id = kysymys_id;
 	}
 
 
@@ -85,6 +104,27 @@ public class Kysymys {
 	public void setKysymys(String kysymys) {
 		this.kysymys = kysymys;
 	}
+	
+	public Kysymys(String kysymys, Kysymystyyppi tyyppi, List<Vaihtoehto> vaihtoehdot) {
+		super();
+		this.kysymys = kysymys;
+		this.tyyppi = tyyppi;
+		this.vaihtoehdot = vaihtoehdot;
+	}
+	
+	public Kysymys(String kysymys, Kysymystyyppi tyyppi) {
+		super();
+		this.kysymys = kysymys;
+		this.tyyppi = tyyppi;
+	}
+	
+	public Kysymys(String kysymys, Kysymystyyppi tyyppi, Kysely kysely) {
+		super();
+		this.kysely = kysely;
+		this.tyyppi = tyyppi;
+		this.kysymys = kysymys;
+	}
+
 
 	public Kysymys(String kysymys, List<Vaihtoehto> vaihtoehdot) {
 		super();
