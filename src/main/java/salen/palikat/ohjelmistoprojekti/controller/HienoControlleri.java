@@ -91,7 +91,10 @@ KyselyRepository kyselyRepo;
 			for (int j = 0; j < kysely.getKysymykset().get(i).getVastaus().size(); j++) {
 				//tässä kohdassa generoidaan sessionID
 				//kysely.getKysymykset().get(i).getVastaus().get(j).setSessionkey(GENEROITU_KEY);
+				SessioID sessioid = new SessioID();
+				sessioidRepo.save(sessioid);
 				Vastaus vastaus = kysely.getKysymykset().get(i).getVastaus().get(j);
+				vastaus.setSessioid(sessioid.getId().intValue());
 				vastausRepo.save(vastaus);
 			}
 		}
