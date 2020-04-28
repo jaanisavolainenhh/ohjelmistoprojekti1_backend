@@ -9,10 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import salen.palikat.ohjelmistoprojekti.domain.Kysely;
@@ -25,32 +28,31 @@ import salen.palikat.ohjelmistoprojekti.domain.VaihtoehtoRepository;
 import salen.palikat.ohjelmistoprojekti.domain.Vastaus;
 import salen.palikat.ohjelmistoprojekti.domain.VastausRepository;
 
-
 @Controller
 public class HienoControlleri {
 
-@Autowired
-KysymysRepository kysymysRepo;
+	@Autowired
+	KysymysRepository kysymysRepo;
 
-@Autowired
-VastausRepository vastausRepo;
+	@Autowired
+	VastausRepository vastausRepo;
 
-@Autowired
-VaihtoehtoRepository vaihtoehtoRepo;
+	@Autowired
+	VaihtoehtoRepository vaihtoehtoRepo;
 
-@Autowired
+	@Autowired
 
-SessioIDRepository sessioidRepo; 
+	SessioIDRepository sessioidRepo;
 
- @Autowired
-KyselyRepository kyselyRepo;
-	
- 	@CrossOrigin
+	@Autowired
+	KyselyRepository kyselyRepo;
+
+	@CrossOrigin
 	@GetMapping("/kyselytadmin")
 	public @ResponseBody List<Kysely> kyselyListAdminResti() {
- 		return (List<Kysely>) kyselyRepo.findAll();
- 	}
- 
+		return (List<Kysely>) kyselyRepo.findAll();
+	}
+
 	@CrossOrigin
 	@GetMapping("/kyselyt")
 	public @ResponseBody List<Kysely> kyselyListResti() {
@@ -63,8 +65,8 @@ KyselyRepository kyselyRepo;
 		}
 		return kyselyt;
 	}
-	
-	//Tähän käyttäjä postaa kyselyn vastaukset kysely-oliona
+
+	// Tähän käyttäjä postaa kyselyn vastaukset kysely-oliona
 	@CrossOrigin
 	@PostMapping("/kyselyt")
 	public @ResponseBody String kyselyynVastaukset(@RequestBody Kysely kysely) {
@@ -73,94 +75,158 @@ KyselyRepository kyselyRepo;
 		sessioid.setKysely(kyselyRepo.findById(kysely.getKysely_id()).get());
 		sessioidRepo.save(sessioid);
 		for (int i = 0; i < kysely.getKysymykset().size(); i++) {
-			//Vastaus luokka voidaan ottaa kokonaan pois ja postata suoraan vaihtoehtoluokan tiedoilla kiakki vastauksen tietokannan uuteen vastaus tauluun (uusi repo?)
+			// Vastaus luokka voidaan ottaa kokonaan pois ja postata suoraan
+			// vaihtoehtoluokan tiedoilla kiakki vastauksen tietokannan uuteen
+			// vastaus tauluun (uusi repo?)
 			for (int j = 0; j < kysely.getKysymykset().get(i).getVastaus().size(); j++) {
-				//tässä kohdassa generoidaan sessionID
-				//kysely.getKysymykset().get(i).getVastaus().get(j).setSessionkey(GENEROITU_KEY);
+				// tässä kohdassa generoidaan sessionID
+				// kysely.getKysymykset().get(i).getVastaus().get(j).setSessionkey(GENEROITU_KEY);
 
 				Vastaus vastaus = kysely.getKysymykset().get(i).getVastaus().get(j);
 				vastaus.setSessioid(sessioid.getId().intValue());
 				vastausRepo.save(vastaus);
 			}
 		}
-		
-		return  "Vastausten lähettäminen onnistui.";
+
+		return "Vastausten lähettäminen onnistui.";
 	}
-	
-//	@CrossOrigin
-//	@GetMapping("/sessions/{id}")
-//	public @ResponseBody List<Vastaus> vastauksetSessioittainResti(@PathVariable("id") int sessioid) {
-//		return vastausRepo.findBySessioid(sessioid);
-//	}
-	
-	//Tällä kaverilla saadaan tallennettua uusi kysely
+
+	// @CrossOrigin
+	// @GetMapping("/sessions/{id}")
+	// public @ResponseBody List<Vastaus>
+	// vastauksetSessioittainResti(@PathVariable("id") int sessioid) {
+	// return vastausRepo.findBySessioid(sessioid);
+	// }
+
+	// Tällä kaverilla saadaan tallennettua uusi kysely
 	@CrossOrigin
 	@PostMapping("/tallennauusikysely")
 	public @ResponseBody String kyselynTallennus(@RequestBody Kysely kysely) {
-		//tallenetaan kysely kantaan
+		// tallenetaan kysely kantaan
 		kyselyRepo.save(kysely);
-		//käydään läpi kaikki kyselyn kysymykset
+		// käydään läpi kaikki kyselyn kysymykset
 		for (int i = 0; i < kysely.getKysymykset().size(); i++) {
-			//tallenetaan kysymys kantaan
+			// tallenetaan kysymys kantaan
 			kysymysRepo.save(kysely.getKysymykset().get(i));
-			//sitten taas käydään kysymyksen kaikki vaihtoehdot läpi
+			// sitten taas käydään kysymyksen kaikki vaihtoehdot läpi
 			for (int j = 0; j < kysely.getKysymykset().get(i).getVaihtoehdot().size(); j++) {
-				//ja tallennetaan nekin talteen
+				// ja tallennetaan nekin talteen
 				vaihtoehtoRepo.save(kysely.getKysymykset().get(i).getVaihtoehdot().get(j));
 			}
-		}	
-			
+		}
+
 		return "Onnistuit";
 	}
+
+	@CrossOrigin
+	// tässä endpointissa annetaan endpointin id osaan kysymyksen id, joka
+	// halutaan poistaa
+	@RequestMapping(value = "/kysymys/{id}", method = RequestMethod.DELETE)
+	public @ResponseBody String poistakysymys(@PathVariable("id") Long kysymys_id) {
+		Kysymys kysymys = kysymysRepo.findById(kysymys_id).get();
+		if (kysymys == null) {
+			return "Ei löytynyt kysymystä tällä ID:llä";
+		}
+		for (int i = 0; i < kysymys.getVaihtoehdot().size(); i++) {
+			vaihtoehtoRepo.deleteById(kysymys.getVaihtoehdot().get(i).getVaihtoehto_id());
+		}
+		for (int i = 0; i < kysymys.getVastaus().size(); i++) {
+			vastausRepo.deleteById(kysymys.getVastaus().get(i).getVastaus_id());
+		}
+		kysymysRepo.deleteById(kysymys_id);
+		return "Onnistuit poistamaan";
+	}
+
+	@CrossOrigin
+	// tässä endpointissa lähetetään lisättävä kysymys oliona ja endpointin id
+	// osaan laitetaan kyselyn id, joohn halutaan kysymys lisätä
+	@PostMapping("/kysymys/{id}")
+	public @ResponseBody String lisaakysymys(@PathVariable("id") Long kysely_id, @RequestBody Kysymys kysymys) {
+		Kysely kysely = kyselyRepo.findById(kysely_id).get();
+		kysymys.setKysely(kysely);
+		kysymysRepo.save(kysymys);
+		return "Onnistuit lisäämään kysymyksen";
+	}
+
+	@CrossOrigin
+	@RequestMapping(value = "/kysymys/{id}", method = RequestMethod.PUT)
+	public @ResponseBody String muokkaakysymys(@PathVariable("id") Long kysely_id, @RequestBody Kysymys kysymys) {
+		System.out.println("tästä lähtee");
+		if (kysymys == null) {
+			return "Ei löytynyt kysymystä tällä ID:llä";
+		} else if (kysymys.getKysymys_id() == null) {
+			return "Kysymys id null";
+		} else {
+			poistavastaukset(kysymys);
+			Kysely kysely = kyselyRepo.findById(kysely_id).get();
+			kysymys.setKysely(kysely);
+			kysymysRepo.save(kysymys);
+			return "Muokkaus onnistui";
+		}
+	}
 	
-	
-	
-//	@CrossOrigin
-//	@ResponseBody
-//	@PostMapping("/palautakysely")
-//	public String palautaKysymysLista(@RequestBody List<Vastaus >vastaus) //Juu tässä vaadittiin vaan @RequestBody, converttaa jsonin java classiin
-//	{
-//		System.out.println(vastaus.toString());
-//		//System.out.println(kysymysok(vastaus));
-//		return "index";
-//	}
-//	
-//	
-	
-	
-	//EI käytössä atm, jätetään jostain syystä	
+	private void poistavastaukset(Kysymys kysymys) {
+		Kysymys kysymys2 = kysymysRepo.findById(kysymys.getKysymys_id()).get();
+		for (int i = 0; i < kysymys2.getVaihtoehdot().size(); i++) {
+			vaihtoehtoRepo.deleteById(kysymys2.getVaihtoehdot().get(i).getVaihtoehto_id());
+		}
+		System.out.println(kysymys2.getVastaus().size());
+		for (int j = 0; j < kysymys2.getVastaus().size(); j++) {
+			vastausRepo.deleteById(kysymys2.getVastaus().get(j).getVastaus_id());
+		}
+	}
+	// @CrossOrigin
+	// @ResponseBody
+	// @PostMapping("/palautakysely")
+	// public String palautaKysymysLista(@RequestBody List<Vastaus >vastaus)
+	// //Juu tässä vaadittiin vaan @RequestBody, converttaa jsonin java classiin
+	// {
+	// System.out.println(vastaus.toString());
+	// //System.out.println(kysymysok(vastaus));
+	// return "index";
+	// }
+	//
+	//
+
+	// EI käytössä atm, jätetään jostain syystä
 	@CrossOrigin
 	@ResponseBody
 	@PostMapping("/palautakysymys")
-	public String palautaKysymys(@RequestBody List<Vastaus> vastaus) //Juu tässä vaadittiin vaan @RequestBody, converttaa jsonin java classiin
+	public String palautaKysymys(@RequestBody List<Vastaus> vastaus) // Juu
+																		// tässä
+																		// vaadittiin
+																		// vaan
+																		// @RequestBody,
+																		// converttaa
+																		// jsonin
+																		// java
+																		// classiin
 	{
-		
+
 		SessioID sessioid = new SessioID();
 		sessioidRepo.save(sessioid);
-		
-		for(Vastaus uusivastaus : vastaus) {
+
+		for (Vastaus uusivastaus : vastaus) {
 			uusivastaus.setSessioid(sessioid.getId().intValue());
 			System.out.println(kysymysok(uusivastaus));
 		}
-		
-		//System.out.println(vastaus.toString());
-		//  System.out.println(kysymysok(vastaus));
+
+		// System.out.println(vastaus.toString());
+		// System.out.println(kysymysok(vastaus));
 		return "index";
 	}
-	
-	
-	private boolean kysymysok(Vastaus vastaus)
-	{
+
+	private boolean kysymysok(Vastaus vastaus) {
 
 		Optional<Kysymys> kysymys = kysymysRepo.findById(vastaus.getKysymys().getKysymys_id());
-		if(!kysymys.isPresent())
+		if (!kysymys.isPresent())
 			return false;
-		
+
 		Kysymys oikeakysymys = kysymys.get();
 		System.out.println("TESTIÄ");
 		vastaus.setKysymys(oikeakysymys);
 		vastausRepo.save(vastaus);
 		return true;
 	}
-	
+
 }
