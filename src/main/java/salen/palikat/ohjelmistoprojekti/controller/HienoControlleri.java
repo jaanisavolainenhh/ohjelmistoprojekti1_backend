@@ -1,5 +1,6 @@
 package salen.palikat.ohjelmistoprojekti.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +25,7 @@ import salen.palikat.ohjelmistoprojekti.domain.Kysymys;
 import salen.palikat.ohjelmistoprojekti.domain.KysymysRepository;
 import salen.palikat.ohjelmistoprojekti.domain.SessioID;
 import salen.palikat.ohjelmistoprojekti.domain.SessioIDRepository;
+import salen.palikat.ohjelmistoprojekti.domain.Vaihtoehto;
 import salen.palikat.ohjelmistoprojekti.domain.VaihtoehtoRepository;
 import salen.palikat.ohjelmistoprojekti.domain.Vastaus;
 import salen.palikat.ohjelmistoprojekti.domain.VastausRepository;
@@ -124,15 +126,15 @@ public class HienoControlleri {
 	@RequestMapping(value = "/kysymys/{id}", method = RequestMethod.DELETE)
 	public @ResponseBody String poistakysymys(@PathVariable("id") Long kysymys_id) {
 		Kysymys kysymys = kysymysRepo.findById(kysymys_id).get();
-		if (kysymys == null) {
-			return "Ei löytynyt kysymystä tällä ID:llä";
-		}
-		for (int i = 0; i < kysymys.getVaihtoehdot().size(); i++) {
-			vaihtoehtoRepo.deleteById(kysymys.getVaihtoehdot().get(i).getVaihtoehto_id());
-		}
-		for (int i = 0; i < kysymys.getVastaus().size(); i++) {
-			vastausRepo.deleteById(kysymys.getVastaus().get(i).getVastaus_id());
-		}
+//		if (kysymys == null) {
+//			return "Ei löytynyt kysymystä tällä ID:llä";
+//		}
+//		for (int i = 0; i < kysymys.getVaihtoehdot().size(); i++) {
+//			vaihtoehtoRepo.deleteById(kysymys.getVaihtoehdot().get(i).getVaihtoehto_id());
+//		}
+//		for (int i = 0; i < kysymys.getVastaus().size(); i++) {
+//			vastausRepo.deleteById(kysymys.getVastaus().get(i).getVastaus_id());
+//		}
 		kysymysRepo.deleteById(kysymys_id);
 		return "Onnistuit poistamaan";
 	}
@@ -147,34 +149,42 @@ public class HienoControlleri {
 		kysymysRepo.save(kysymys);
 		return "Onnistuit lisäämään kysymyksen";
 	}
-
+	
+	
 	@CrossOrigin
+	// id osaan muokattavan kysymyksen id
 	@RequestMapping(value = "/kysymys/{id}", method = RequestMethod.PUT)
-	public @ResponseBody String muokkaakysymys(@PathVariable("id") Long kysely_id, @RequestBody Kysymys kysymys) {
-		System.out.println("tästä lähtee");
+	public @ResponseBody String muokkaakysymys(@PathVariable("id") Long kysymys_id, @RequestBody Kysymys kysymys) {
 		if (kysymys == null) {
 			return "Ei löytynyt kysymystä tällä ID:llä";
-		} else if (kysymys.getKysymys_id() == null) {
-			return "Kysymys id null";
-		} else {
-			poistavastaukset(kysymys);
-			Kysely kysely = kyselyRepo.findById(kysely_id).get();
-			kysymys.setKysely(kysely);
-			kysymysRepo.save(kysymys);
-			return "Muokkaus onnistui";
 		}
-	}
-	
-	private void poistavastaukset(Kysymys kysymys) {
-		Kysymys kysymys2 = kysymysRepo.findById(kysymys.getKysymys_id()).get();
+		
+		Kysymys kysymys2 = kysymysRepo.findById(kysymys_id).get();
+		
 		for (int i = 0; i < kysymys2.getVaihtoehdot().size(); i++) {
 			vaihtoehtoRepo.deleteById(kysymys2.getVaihtoehdot().get(i).getVaihtoehto_id());
 		}
-		System.out.println(kysymys2.getVastaus().size());
-		for (int j = 0; j < kysymys2.getVastaus().size(); j++) {
-			vastausRepo.deleteById(kysymys2.getVastaus().get(j).getVastaus_id());
+		for (int i = 0; i < kysymys2.getVastaus().size(); i++) {
+			vastausRepo.deleteById(kysymys2.getVastaus().get(i).getVastaus_id());
 		}
+
+		kysymys2.setTyyppi(kysymys.getTyyppi());
+		kysymys2.setKysymys(kysymys.getKysymys());
+		kysymys2.setVaihtoehdot(new ArrayList<Vaihtoehto>());
+		kysymys2.setVastaus(new ArrayList<Vastaus>());
+		kysymysRepo.save(kysymys2);
+		
+		List<Vaihtoehto> vaihtoehdot = kysymys.getVaihtoehdot();
+		
+		for (int i = 0; i < vaihtoehdot.size(); i++) {
+			Vaihtoehto vaiht = vaihtoehdot.get(i);
+			vaiht.setKysymys(kysymys2);
+			vaihtoehtoRepo.save(vaiht);
+		}
+		
+		return "Onnistuit";
 	}
+	
 	// @CrossOrigin
 	// @ResponseBody
 	// @PostMapping("/palautakysely")

@@ -22,11 +22,11 @@ public class Kysely {
 	private Long kysely_id;
 	private String name;
 	//vaihdettu mergestä alliin
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "kysely")
+	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "kysely")
 	@JsonManagedReference
 	private List<Kysymys> kysymykset;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "kysely")
+	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "kysely")
 	@JsonManagedReference
 	private List<SessioID> sessioidt;
 

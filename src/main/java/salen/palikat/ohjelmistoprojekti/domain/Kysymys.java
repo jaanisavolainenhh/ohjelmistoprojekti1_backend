@@ -31,10 +31,10 @@ public class Kysymys {
 	private Kysymystyyppi tyyppi;
 	private String kysymys;
 	//Vaihdettu Cascadetype Mergestä takaisin alliin
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "kysymys")
+	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "kysymys")
 	@JsonManagedReference
 	private List<Vaihtoehto> vaihtoehdot;
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "kysymys")
+	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "kysymys")
 	@JsonManagedReference
 	private List<Vastaus> vastaus;
 
