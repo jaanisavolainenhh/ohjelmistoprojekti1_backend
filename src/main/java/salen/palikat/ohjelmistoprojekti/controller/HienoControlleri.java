@@ -54,6 +54,24 @@ public class HienoControlleri {
 	public @ResponseBody List<Kysely> kyselyListAdminResti() {
 		return (List<Kysely>) kyselyRepo.findAll();
 	}
+	
+	@CrossOrigin
+	@GetMapping("/kyselyadmin/{id}")
+	public @ResponseBody Kysely kyselyAdnimResti(@PathVariable("id") Long id) {
+
+		return kyselyRepo.findById(id).get();
+	}
+	
+	@CrossOrigin
+	@GetMapping("/kysely/{id}")
+	public @ResponseBody Kysely kyselyResti(@PathVariable("id") Long id) {
+		Kysely kysely = kyselyRepo.findById(id).get();
+		kysely.setSessioidt(new ArrayList<SessioID>());
+		for (int i = 0; i < kysely.getKysymykset().size(); i++) {
+			kysely.getKysymykset().get(i).setVastaus(new ArrayList<Vastaus>());
+		}
+		return kysely;
+	}
 
 	@CrossOrigin
 	@GetMapping("/kyselyt")
@@ -92,13 +110,6 @@ public class HienoControlleri {
 
 		return "Vastausten lähettäminen onnistui.";
 	}
-
-	// @CrossOrigin
-	// @GetMapping("/sessions/{id}")
-	// public @ResponseBody List<Vastaus>
-	// vastauksetSessioittainResti(@PathVariable("id") int sessioid) {
-	// return vastausRepo.findBySessioid(sessioid);
-	// }
 
 	// Tällä kaverilla saadaan tallennettua uusi kysely
 	@CrossOrigin

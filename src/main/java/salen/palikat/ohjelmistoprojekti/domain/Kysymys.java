@@ -30,6 +30,7 @@ public class Kysymys {
 	private Kysely kysely;
 	private Kysymystyyppi tyyppi;
 	private String kysymys;
+	private boolean pakollinen;
 	//Vaihdettu Cascadetype Mergestä takaisin alliin
 	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "kysymys")
 	@JsonManagedReference
@@ -65,6 +66,16 @@ public class Kysymys {
 
 
 	
+
+
+	public boolean isPakollinen() {
+		return pakollinen;
+	}
+
+
+	public void setPakollinen(boolean pakollinen) {
+		this.pakollinen = pakollinen;
+	}
 
 
 	public Long getKysymys_id() {
