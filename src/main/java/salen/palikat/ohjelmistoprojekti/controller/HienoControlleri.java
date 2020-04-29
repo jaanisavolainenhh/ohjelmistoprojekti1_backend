@@ -146,6 +146,7 @@ public class HienoControlleri {
 		
 		kysely2.setName(kysely.getName());
 		kysely2.setKysymykset(new ArrayList<Kysymys>());
+		kysely2.setSessioidt(new ArrayList<SessioID>());
 		kyselyRepo.save(kysely2);
 		
 		List<Kysymys> kysymykset = kysely.getKysymykset();
@@ -155,6 +156,7 @@ public class HienoControlleri {
 			List<Vaihtoehto> vaihtoehdot = kys.getVaihtoehdot();
 			kys.setKysymys_id(null);
 			kys.setKysely(kysely2);
+			kys.setVastaus(new ArrayList<Vastaus>());
 			kys.setVaihtoehdot(new ArrayList<Vaihtoehto>());
 			kysymysRepo.save(kys);
 			for (int j = 0; j < vaihtoehdot.size(); j++) {
