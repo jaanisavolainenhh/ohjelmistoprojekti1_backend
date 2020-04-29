@@ -78,9 +78,9 @@ public class HienoControlleri {
 	public @ResponseBody List<Kysely> kyselyListResti() {
 		List<Kysely> kyselyt = (List<Kysely>) kyselyRepo.findAll();
 		for (int i = 0; i < kyselyt.size(); i++) {
-			kyselyt.get(i).setSessioidt(null);
+			kyselyt.get(i).setSessioidt(new ArrayList<SessioID>());
 			for (int j = 0; j < kyselyt.get(i).getKysymykset().size(); j++) {
-				kyselyt.get(i).getKysymykset().get(j).setVastaus(null);
+				kyselyt.get(i).getKysymykset().get(j).setVastaus(new ArrayList<Vastaus>());
 			}
 		}
 		return kyselyt;
@@ -130,7 +130,44 @@ public class HienoControlleri {
 
 		return "Onnistuit";
 	}
-
+	
+	@CrossOrigin
+	@RequestMapping(value = "/kysely/{id}", method = RequestMethod.PUT)
+	public @ResponseBody String muokkaakysely(@PathVariable("id") Long kysely_id, @RequestBody Kysely kysely) {
+		
+		Kysely kysely2 = kyselyRepo.findById(kysely_id).get();
+		
+		for (int i = 0; i < kysely2.getKysymykset().size(); i++) {
+			kysymysRepo.deleteById(kysely2.getKysymykset().get(i).getKysymys_id());
+		}
+		for (int i = 0; i < kysely2.getSessioidt().size(); i++) {
+			sessioidRepo.deleteById(kysely2.getSessioidt().get(i).getId());
+		}
+		
+		kysely2.setName(kysely.getName());
+		kysely2.setKysymykset(new ArrayList<Kysymys>());
+		kyselyRepo.save(kysely2);
+		
+		List<Kysymys> kysymykset = kysely.getKysymykset();
+		
+		for (int i = 0; i < kysymykset.size(); i++) {
+			Kysymys kys = kysymykset.get(i);
+			List<Vaihtoehto> vaihtoehdot = kys.getVaihtoehdot();
+			kys.setKysymys_id(null);
+			kys.setKysely(kysely2);
+			kys.setVaihtoehdot(new ArrayList<Vaihtoehto>());
+			kysymysRepo.save(kys);
+			for (int j = 0; j < vaihtoehdot.size(); j++) {
+				Vaihtoehto vaiht = vaihtoehdot.get(j);
+				vaiht.setVaihtoehto_id(null);
+				vaiht.setKysymys(kys);
+				vaihtoehtoRepo.save(vaiht);
+			}
+		}
+		
+		return "Meni läpi";
+	}
+	
 	@CrossOrigin
 	// tässä endpointissa annetaan endpointin id osaan kysymyksen id, joka
 	// halutaan poistaa
