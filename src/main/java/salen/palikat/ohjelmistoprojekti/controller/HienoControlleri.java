@@ -48,6 +48,11 @@ public class HienoControlleri {
 
 	@Autowired
 	KyselyRepository kyselyRepo;
+	
+	@RequestMapping(value="/login")
+    public String login() {	
+        return "login";
+    }
 
 	@CrossOrigin
 	@GetMapping("/kyselytadmin")
@@ -58,7 +63,7 @@ public class HienoControlleri {
 	@CrossOrigin
 	@GetMapping("/kyselyadmin/{id}")
 	public @ResponseBody Kysely kyselyAdnimResti(@PathVariable("id") Long id) {
-		if (kyselyRepo.findById(id) == null) {
+		if (kyselyRepo.findById(id).orElse(null) == null) {
 			Kysely eiole = new Kysely();
 			eiole.setKysely_id((long)-1);
 			eiole.setName("Kyselyä ei ole olemassa");
@@ -69,8 +74,8 @@ public class HienoControlleri {
 	
 	@CrossOrigin
 	@GetMapping("/kysely/{id}")
-	public @ResponseBody Kysely kyselyResti(@PathVariable("id") Long id) {
-		if (kyselyRepo.findById(id) == null) {
+	public @ResponseBody Kysely kyselyResti(@PathVariable("id") Long id) {		
+		if (kyselyRepo.findById(id).orElse(null) == null) {
 			Kysely eiole = new Kysely();
 			eiole.setKysely_id((long)-1);
 			eiole.setName("Kyselyä ei ole olemassa");
