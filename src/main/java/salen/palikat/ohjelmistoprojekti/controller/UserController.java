@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import salen.palikat.ohjelmistoprojekti.domain.SignupForm;
-import salen.palikat.ohjelmistoprojekti.domain.User;
+import salen.palikat.ohjelmistoprojekti.domain.Useri;
 import salen.palikat.ohjelmistoprojekti.domain.UserRepository;
 
 
@@ -44,7 +44,7 @@ public class UserController {
 		    	BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
 		    	String hashPwd = bc.encode(pwd);
 	
-		    	User newUser = new User();
+		    	Useri newUser = new Useri();
 		    	newUser.setPasswordHash(hashPwd);
 		    	newUser.setUsername(signupForm.getUsername());
 		    	newUser.setRole("USER");

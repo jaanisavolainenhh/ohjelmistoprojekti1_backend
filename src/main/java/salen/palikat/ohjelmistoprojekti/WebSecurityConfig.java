@@ -1,6 +1,5 @@
 package salen.palikat.ohjelmistoprojekti;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,11 +18,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 import salen.palikat.ohjelmistoprojekti.controller.UserDetailServiceImpl;
-
-
-
-
-
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -47,14 +41,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .authorizeRequests().antMatchers("/css/**").permitAll() // Enable css when logged out
         .and()
         .authorizeRequests()
-        .antMatchers("/", "/hakemus", "/api/**").permitAll()
-        //.antMatchers("/", "/add", "/save", "/booklist").permitAll()
-        .antMatchers("/delete/{id}").hasAuthority("ADMIN")
+        .antMatchers("/kysely/*", "/kyselyt", "/kyselytadmin", "/kyselyadmin/*", "/login").permitAll()
         .anyRequest().permitAll()
           .and()
           .formLogin()
-          .loginPage("/login")
-          .defaultSuccessUrl("/lainalista", true)
+          .defaultSuccessUrl("/kyselyt", true)
           .permitAll()
           .and()
       .logout()
@@ -72,16 +63,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public UserDetailsService userDetailsService() {
         List<UserDetails> users = new ArrayList();
     	UserDetails user = User.withDefaultPasswordEncoder()
-                .username("user")
-                .password("password")
-                .roles("USER")
-                .build();
-
-    	users.add(user);
-    	
-    	user = User.withDefaultPasswordEncoder()
                    .username("admin")
-                   .password("password")
+                   .password("admin")
                    .roles("USER", "ADMIN")
                    .build();
     	
