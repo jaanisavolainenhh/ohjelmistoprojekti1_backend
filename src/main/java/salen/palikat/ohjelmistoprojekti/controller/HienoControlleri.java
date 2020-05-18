@@ -131,6 +131,7 @@ public class HienoControlleri {
 		return "Onnistuit";
 	}
 	
+	//kyselyn muokkaaminen
 	@CrossOrigin
 	@RequestMapping(value = "/kysely/{id}", method = RequestMethod.PUT)
 	public @ResponseBody String muokkaakysely(@PathVariable("id") Long kysely_id, @RequestBody Kysely kysely) {
