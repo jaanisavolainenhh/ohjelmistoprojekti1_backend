@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import salen.palikat.ohjelmistoprojekti.domain.User;
+import salen.palikat.ohjelmistoprojekti.domain.Useri;
 import salen.palikat.ohjelmistoprojekti.domain.UserRepository;
 
 
@@ -27,7 +27,7 @@ public class UserDetailServiceImpl implements UserDetailsService  {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {   
-    	User curruser = repository.findByUsername(username);
+    	Useri curruser = repository.findByUsername(username);
         UserDetails user = new org.springframework.security.core.userdetails.User(username, curruser.getPasswordHash(), 
         		AuthorityUtils.createAuthorityList(curruser.getRole()));
         System.out.println("################## " + curruser.getPasswordHash());
