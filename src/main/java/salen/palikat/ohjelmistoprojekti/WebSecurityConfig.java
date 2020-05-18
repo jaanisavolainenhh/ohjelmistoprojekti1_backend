@@ -28,7 +28,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-		if (false) {
+		if (true) {
 			http.csrf().disable(); //enabloi deleten puttin käyttämisen
 			http.authorizeRequests().antMatchers("/**").permitAll(); // sallitaan kaikki debug mielessä
 			http.headers().frameOptions().disable(); //Tämä enabloi h2 consolen käytön jos websecurity asetukset on laitettu
@@ -41,7 +41,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .authorizeRequests().antMatchers("/css/**").permitAll() // Enable css when logged out
         .and()
         .authorizeRequests()
-        .antMatchers("/kysely/*", "/kyselyt", "/kyselytadmin", "/kyselyadmin/*").permitAll()
+        .antMatchers("/kysely/*", "/kyselyt", "/kyselytadmin", "/kyselyadmin/*", "/login").permitAll()
         .anyRequest().permitAll()
           .and()
           .formLogin()
