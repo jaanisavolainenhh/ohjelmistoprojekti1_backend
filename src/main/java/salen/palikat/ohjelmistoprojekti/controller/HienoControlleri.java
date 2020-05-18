@@ -7,6 +7,7 @@ import java.util.Optional;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -49,11 +50,6 @@ public class HienoControlleri {
 	@Autowired
 	KyselyRepository kyselyRepo;
 	
-	@RequestMapping(value="/login")
-    public String login() {	
-        return "login";
-    }
-
 	@CrossOrigin
 	@GetMapping("/kyselytadmin")
 	public @ResponseBody List<Kysely> kyselyListAdminResti() {
@@ -62,7 +58,7 @@ public class HienoControlleri {
 	
 	@CrossOrigin
 	@GetMapping("/kyselyadmin/{id}")
-	public @ResponseBody Kysely kyselyAdnimResti(@PathVariable("id") Long id) {
+	public @ResponseBody Kysely kyselyAdminResti(@PathVariable("id") Long id) {
 		if (kyselyRepo.findById(id).orElse(null) == null) {
 			Kysely eiole = new Kysely();
 			eiole.setKysely_id((long)-1);
@@ -104,6 +100,7 @@ public class HienoControlleri {
 
 	// Tähän käyttäjä postaa kyselyn vastaukset kysely-oliona
 	@CrossOrigin
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@PostMapping("/kyselyt")
 	public @ResponseBody String kyselyynVastaukset(@RequestBody Kysely kysely) {
 		System.out.println(kysely.getKysymykset().size());
@@ -129,7 +126,8 @@ public class HienoControlleri {
 
 	// Tällä kaverilla saadaan tallennettua uusi kysely
 	@CrossOrigin
-	@PostMapping("/tallennauusikysely")
+	@PreAuthorize("hasAuthority('ADMIN')")
+	@PostMapping("/kysely")
 	public @ResponseBody String kyselynTallennus(@RequestBody Kysely kysely) {
 		// tallenetaan kysely kantaan
 		kyselyRepo.save(kysely);
@@ -149,6 +147,7 @@ public class HienoControlleri {
 	
 	//kyselyn muokkaaminen
 	@CrossOrigin
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@RequestMapping(value = "/kysely/{id}", method = RequestMethod.PUT)
 	public @ResponseBody String muokkaakysely(@PathVariable("id") Long kysely_id, @RequestBody Kysely kysely) {
 		
@@ -188,6 +187,7 @@ public class HienoControlleri {
 	}
 	
 	@CrossOrigin
+	@PreAuthorize("hasAuthority('ADMIN')")
 	// tässä endpointissa annetaan endpointin id osaan kysymyksen id, joka
 	// halutaan poistaa
 	@RequestMapping(value = "/kysymys/{id}", method = RequestMethod.DELETE)
@@ -207,6 +207,7 @@ public class HienoControlleri {
 	}
 
 	@CrossOrigin
+	@PreAuthorize("hasAuthority('ADMIN')")
 	// tässä endpointissa lähetetään lisättävä kysymys oliona ja endpointin id
 	// osaan laitetaan kyselyn id, joohn halutaan kysymys lisätä
 	@PostMapping("/kysymys/{id}")
@@ -219,6 +220,7 @@ public class HienoControlleri {
 	
 	
 	@CrossOrigin
+	@PreAuthorize("hasAuthority('ADMIN')")
 	// id osaan muokattavan kysymyksen id
 	@RequestMapping(value = "/kysymys/{id}", method = RequestMethod.PUT)
 	public @ResponseBody String muokkaakysymys(@PathVariable("id") Long kysymys_id, @RequestBody Kysymys kysymys) {
@@ -251,59 +253,4 @@ public class HienoControlleri {
 		
 		return "Onnistuit";
 	}
-	
-	// @CrossOrigin
-	// @ResponseBody
-	// @PostMapping("/palautakysely")
-	// public String palautaKysymysLista(@RequestBody List<Vastaus >vastaus)
-	// //Juu tässä vaadittiin vaan @RequestBody, converttaa jsonin java classiin
-	// {
-	// System.out.println(vastaus.toString());
-	// //System.out.println(kysymysok(vastaus));
-	// return "index";
-	// }
-	//
-	//
-
-	// EI käytössä atm, jätetään jostain syystä
-	@CrossOrigin
-	@ResponseBody
-	@PostMapping("/palautakysymys")
-	public String palautaKysymys(@RequestBody List<Vastaus> vastaus) // Juu
-																		// tässä
-																		// vaadittiin
-																		// vaan
-																		// @RequestBody,
-																		// converttaa
-																		// jsonin
-																		// java
-																		// classiin
-	{
-
-		SessioID sessioid = new SessioID();
-		sessioidRepo.save(sessioid);
-
-		for (Vastaus uusivastaus : vastaus) {
-			uusivastaus.setSessioid(sessioid.getId().intValue());
-			System.out.println(kysymysok(uusivastaus));
-		}
-
-		// System.out.println(vastaus.toString());
-		// System.out.println(kysymysok(vastaus));
-		return "index";
-	}
-
-	private boolean kysymysok(Vastaus vastaus) {
-
-		Optional<Kysymys> kysymys = kysymysRepo.findById(vastaus.getKysymys().getKysymys_id());
-		if (!kysymys.isPresent())
-			return false;
-
-		Kysymys oikeakysymys = kysymys.get();
-		System.out.println("TESTIÄ");
-		vastaus.setKysymys(oikeakysymys);
-		vastausRepo.save(vastaus);
-		return true;
-	}
-
 }

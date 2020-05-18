@@ -10,11 +10,14 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+
 import salen.palikat.ohjelmistoprojekti.domain.Kysely;
 import salen.palikat.ohjelmistoprojekti.domain.KyselyRepository;
 import salen.palikat.ohjelmistoprojekti.domain.Kysymys;
 import salen.palikat.ohjelmistoprojekti.domain.KysymysRepository;
 import salen.palikat.ohjelmistoprojekti.domain.Kysymystyyppi;
+import salen.palikat.ohjelmistoprojekti.domain.UserRepository;
+import salen.palikat.ohjelmistoprojekti.domain.Useri;
 import salen.palikat.ohjelmistoprojekti.domain.Vaihtoehto;
 import salen.palikat.ohjelmistoprojekti.domain.VaihtoehtoRepository;
 import salen.palikat.ohjelmistoprojekti.domain.Vastaus;
@@ -30,7 +33,7 @@ public class OhjelmistoprojektiApplication {
 	}
 
 	@Bean // tähän voi tunkea loputtomasti argumentteja näköjään?
-	public CommandLineRunner bookstoreDemo(KyselyRepository kyselyRepo, KysymysRepository kysymysRepo, VastausRepository vastausRepo, VaihtoehtoRepository vaihtoehtoRepo) {
+	public CommandLineRunner bookstoreDemo(KyselyRepository kyselyRepo, KysymysRepository kysymysRepo, VastausRepository vastausRepo, VaihtoehtoRepository vaihtoehtoRepo, UserRepository userRepo) {
 		
 		return (args) -> {
 //			
@@ -78,7 +81,8 @@ public class OhjelmistoprojektiApplication {
 			vaihtoehtoRepo.save(new Vaihtoehto("Oranssi", kysymysRepo.findByKysymys("Tämä on kysymys 1, mistä väristä pidät?").get(0)));
 			vaihtoehtoRepo.save(new Vaihtoehto("Pinkki", kysymysRepo.findByKysymys("Tämä on kysymys 1, mistä väristä pidät?").get(0)));
 			vaihtoehtoRepo.save(new Vaihtoehto("", kysymysRepo.findByKysymys("Tämä on kysymys 2, anna teksti").get(0)));
-			
+			Useri user2 = new Useri("admin", "$2a$10$0MMwY.IQqpsVc1jC8u7IJ.2rT8b0Cd3b3sfIBGV2zfgnPGtT4r0.C", "ADMIN");
+			userRepo.save(user2);
 			
 //			Vastaus vastaus1 = new Vastaus("Punainen", kysymys);
 //			Vastaus vastaus2 = new Vastaus("Ruskea", kysymys);
