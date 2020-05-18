@@ -51,6 +51,12 @@ public class HienoControlleri {
 	KyselyRepository kyselyRepo;
 	
 	@CrossOrigin
+	@GetMapping("/kirjauduit")
+	public @ResponseBody boolean onnistuitKirjautumaan() {
+		return true;
+	}
+	
+	@CrossOrigin
 	@GetMapping("/kyselytadmin")
 	public @ResponseBody List<Kysely> kyselyListAdminResti() {
 		return (List<Kysely>) kyselyRepo.findAll();
@@ -69,6 +75,7 @@ public class HienoControlleri {
 	}
 	
 	@CrossOrigin
+//	@PreAuthorize("hasAuthority('ADMIN')")
 	@GetMapping("/kysely/{id}")
 	public @ResponseBody Kysely kyselyResti(@PathVariable("id") Long id) {		
 		if (kyselyRepo.findById(id).orElse(null) == null) {
@@ -100,6 +107,7 @@ public class HienoControlleri {
 
 	// Tähän käyttäjä postaa kyselyn vastaukset kysely-oliona
 	@CrossOrigin
+//	@PreAuthorize("hasAuthority('ADMIN')")
 	@PostMapping("/kyselyt")
 	public @ResponseBody String kyselyynVastaukset(@RequestBody Kysely kysely) {
 		System.out.println(kysely.getKysymykset().size());
@@ -125,6 +133,7 @@ public class HienoControlleri {
 
 	// Tällä kaverilla saadaan tallennettua uusi kysely
 	@CrossOrigin
+//	@PreAuthorize("hasAuthority('ADMIN')")
 	@PostMapping("/kysely")
 	public @ResponseBody String kyselynTallennus(@RequestBody Kysely kysely) {
 		// tallenetaan kysely kantaan
@@ -145,6 +154,7 @@ public class HienoControlleri {
 	
 	//kyselyn muokkaaminen
 	@CrossOrigin
+//	@PreAuthorize("hasAuthority('ADMIN')")
 	@RequestMapping(value = "/kysely/{id}", method = RequestMethod.PUT)
 	public @ResponseBody String muokkaakysely(@PathVariable("id") Long kysely_id, @RequestBody Kysely kysely) {
 		
@@ -184,6 +194,7 @@ public class HienoControlleri {
 	}
 	
 	@CrossOrigin
+//	@PreAuthorize("hasAuthority('ADMIN')")
 	// tässä endpointissa annetaan endpointin id osaan kysymyksen id, joka
 	// halutaan poistaa
 	@RequestMapping(value = "/kysely/{id}", method = RequestMethod.DELETE)
@@ -194,25 +205,19 @@ public class HienoControlleri {
 	}
 	
 	@CrossOrigin
+//	@PreAuthorize("hasAuthority('ADMIN')")
 	// tässä endpointissa annetaan endpointin id osaan kysymyksen id, joka
 	// halutaan poistaa
 	@RequestMapping(value = "/kysymys/{id}", method = RequestMethod.DELETE)
 	public @ResponseBody String poistakysymys(@PathVariable("id") Long kysymys_id) {
 		Kysymys kysymys = kysymysRepo.findById(kysymys_id).get();
-//		if (kysymys == null) {
-//			return "Ei löytynyt kysymystä tällä ID:llä";
-//		}
-//		for (int i = 0; i < kysymys.getVaihtoehdot().size(); i++) {
-//			vaihtoehtoRepo.deleteById(kysymys.getVaihtoehdot().get(i).getVaihtoehto_id());
-//		}
-//		for (int i = 0; i < kysymys.getVastaus().size(); i++) {
-//			vastausRepo.deleteById(kysymys.getVastaus().get(i).getVastaus_id());
-//		}
+
 		kysymysRepo.deleteById(kysymys_id);
 		return "Onnistuit poistamaan";
 	}
 
 	@CrossOrigin
+//	@PreAuthorize("hasAuthority('ADMIN')")
 	// tässä endpointissa lähetetään lisättävä kysymys oliona ja endpointin id
 	// osaan laitetaan kyselyn id, joohn halutaan kysymys lisätä
 	@PostMapping("/kysymys/{id}")
@@ -225,6 +230,7 @@ public class HienoControlleri {
 	
 	
 	@CrossOrigin
+//	@PreAuthorize("hasAuthority('ADMIN')")
 	// id osaan muokattavan kysymyksen id
 	@RequestMapping(value = "/kysymys/{id}", method = RequestMethod.PUT)
 	public @ResponseBody String muokkaakysymys(@PathVariable("id") Long kysymys_id, @RequestBody Kysymys kysymys) {

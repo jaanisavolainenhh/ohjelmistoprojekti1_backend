@@ -44,9 +44,9 @@ public class OhjelmistoprojektiApplication {
 			vaihtoehtoRepo.save(new Vaihtoehto("Ruskea", kysymysRepo.findByKysymys("Tämä on kysymys 1, mistä väristä pidät?").get(0)));
 			vaihtoehtoRepo.save(new Vaihtoehto("Oranssi", kysymysRepo.findByKysymys("Tämä on kysymys 1, mistä väristä pidät?").get(0)));
 			vaihtoehtoRepo.save(new Vaihtoehto("Pinkki", kysymysRepo.findByKysymys("Tämä on kysymys 1, mistä väristä pidät?").get(0)));
-			vaihtoehtoRepo.save(new Vaihtoehto("", kysymysRepo.findByKysymys("Tämä on kysymys 2, anna teksti").get(0)));
-			Useri user2 = new Useri("admin", "$2a$10$0MMwY.IQqpsVc1jC8u7IJ.2rT8b0Cd3b3sfIBGV2zfgnPGtT4r0.C", "ADMIN", "admin@admin.com");
-			userRepo.save(user2);
+//			vaihtoehtoRepo.save(new Vaihtoehto("", kysymysRepo.findByKysymys("Tämä on kysymys 2, anna teksti").get(0)));
+//			Useri user2 = new Useri("admin", "$2a$10$0MMwY.IQqpsVc1jC8u7IJ.2rT8b0Cd3b3sfIBGV2zfgnPGtT4r0.C", "ADMIN", "admin@admin.com");
+//			userRepo.save(user2);
 			
 
 
