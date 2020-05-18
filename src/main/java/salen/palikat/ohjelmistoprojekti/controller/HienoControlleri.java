@@ -58,13 +58,24 @@ public class HienoControlleri {
 	@CrossOrigin
 	@GetMapping("/kyselyadmin/{id}")
 	public @ResponseBody Kysely kyselyAdnimResti(@PathVariable("id") Long id) {
-
+		if (kyselyRepo.findById(id) == null) {
+			Kysely eiole = new Kysely();
+			eiole.setKysely_id((long)-1);
+			eiole.setName("Kyselyä ei ole olemassa");
+			return eiole;
+		}
 		return kyselyRepo.findById(id).get();
 	}
 	
 	@CrossOrigin
 	@GetMapping("/kysely/{id}")
 	public @ResponseBody Kysely kyselyResti(@PathVariable("id") Long id) {
+		if (kyselyRepo.findById(id) == null) {
+			Kysely eiole = new Kysely();
+			eiole.setKysely_id((long)-1);
+			eiole.setName("Kyselyä ei ole olemassa");
+			return eiole;
+		}
 		Kysely kysely = kyselyRepo.findById(id).get();
 		kysely.setSessioidt(new ArrayList<SessioID>());
 		for (int i = 0; i < kysely.getKysymykset().size(); i++) {
